@@ -26,7 +26,7 @@ type Story = StoryObj<typeof meta>;
  */
 export const Default: Story = {
   args: {
-    children: 'Card Heading',
+    children: 'The Quick Brown Fox',
     variant: 'heading-xl',
   },
 };
