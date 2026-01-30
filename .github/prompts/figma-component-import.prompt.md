@@ -23,6 +23,8 @@ Import and implement a Figma component following our codebase standards with com
 - Fetch the Figma component design using Figma MCP tools
 - Extract design tokens (colors, spacing, typography) from Figma variables
 - Identify all child components used within the design
+- Check if Figma design includes interactive states (hover, focus, active, disabled)
+- Note: Only implement states explicitly shown in Figma; don't add "nice to have" states
 
 ### 1.2 Dependency Check
 
@@ -107,6 +109,21 @@ interface [ComponentName]Props extends React.[HTMLElementType]Attributes<HTML[El
 - Support `className` prop for style extension
 - Use spread operator `{...props}` to pass through HTML attributes
 
+**Tailwind v4 CSS Variable Syntax**:
+- Use the shortened syntax for CSS variables: `text-(--color-name)` instead of `text-[var(--color-name)]`
+- Use Tailwind's spacing scale when possible: `w-110` instead of `w-[440px]`
+- Only use arbitrary values `[]` when the exact value isn't in the Tailwind config
+
+**Component Composition**:
+- When a component uses child components, prefer passing props through a dedicated prop
+- Example: Use `buttonProps?: React.ComponentProps<typeof Button>` instead of `buttonText`, `buttonVariant`, `onButtonClick`
+- This allows users to pass any valid props to the child component without cluttering the parent API
+
+**Component Sizing**:
+- Make components `w-full` by default to let parents control width
+- Use Storybook decorators to apply width constraints for visual presentation
+- Don't hard-code max-width unless it's a fundamental part of the component's design
+
 **Example Pattern**:
 ```tsx
 import React from 'react';
@@ -160,8 +177,8 @@ export const Button = ({ children, variant = 'primary', className, ...props }: B
 When the Figma design uses existing components:
 1. Use `mcp_storybook-mcp_get-documentation` to understand the component's API, props, and usage examples
 2. Import from the component's directory: `import { ComponentName } from '../component-name'`
-3. Verify the existing component is up-to-date with current standards
-4. If outdated, update it before using
+3. Use existing components as-is; do NOT modify them during this workflow
+4. If existing components have issues, document them separately for the user
 
 ### 2.4 Index File
 
@@ -286,6 +303,16 @@ pnpm test:ci
 - Create temporary Playwright scripts for testing (not committed to repo)
 - **DO NOT FIX** - Only document discrepancies
 
+**Testing Agents Should NOT**:
+- Add features not present in the Figma design (e.g., hover states, transitions)
+- Recommend changes to existing child components (e.g., Button, Input)
+- Suggest improvements beyond matching the Figma spec
+
+**Testing Agents SHOULD**:
+- Only flag discrepancies between implementation and Figma design
+- Focus on WCAG compliance for accessibility
+- Note missing states only if they're shown in Figma
+
 ### 5.2 Feedback Collection
 
 Both testing agents should provide feedback to #file:../agents/expert-react-frontend-engineer.agent.md in this format:
@@ -324,8 +351,13 @@ Wait for user approval before proceeding.
 
 **DELEGATE TO**: #file:../agents/expert-react-frontend-engineer.agent.md
 
+**CRITICAL**: Do NOT modify existing child components unless they are the component being imported.
+- If testing reveals issues with existing components (e.g., Button missing hover states), document them separately
+- Ask user if they want those components updated in a separate task
+- Only fix issues in the component currently being imported
+
 After user approval:
-1. Implement all approved fixes
+1. Implement all approved fixes for the current component only
 2. Re-run linting and type checking
 3. Re-run tests to verify fixes
 
