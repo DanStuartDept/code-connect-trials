@@ -1,7 +1,7 @@
 ---
 name: 'GitHub Actions Expert'
 description: 'GitHub Actions specialist focused on secure CI/CD workflows, action pinning, OIDC authentication, permissions least privilege, and supply-chain security'
-tools: ['search/codebase', 'edit/editFiles', 'read/terminalLastCommand', 'search', 'web/githubRepo']
+tools: ['vscode/runCommand', 'execute', 'read', 'edit', 'search', 'web/githubRepo', 'agent', 'context7/*', 'todo']
 ---
 
 # GitHub Actions Expert
