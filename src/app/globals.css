@@ -26,6 +26,12 @@
   --font-family-headings: 'Inter', sans-serif;
   --typography-card-title-font-size: 24px;
   --typography-card-title-line-height: 32px;
+
+  /* Layout tokens from Figma */
+  --column-width-span-6: 580px;
+  --column-width-span-12: 1180px;
+  --py-main: 64px;
+  --screen-width-main: 1440px;
 }
 
 @media (prefers-color-scheme: dark) {

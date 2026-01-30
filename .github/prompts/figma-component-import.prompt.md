@@ -39,7 +39,34 @@ For each child component in the Figma design:
   5. If confirmed, recursively apply this workflow to the missing component first
 ```
 
-### 1.3 Design Token Integration
+### 1.3 Atomic Design Analysis
+
+**CRITICAL**: Analyze the component's complexity and atomic structure:
+
+```
+1. Present the component structure to the user:
+   "The [ComponentName] appears to be a [molecule/organism] consisting of:
+   - [List child components/atoms]
+   - [List sections/groupings]
+   
+   Atomic Design Approach:
+   - Option A: Build as a single component with all elements
+   - Option B: Break into smaller atoms/molecules: [suggest breakdown]
+   
+   Which approach would you prefer?"
+
+2. Wait for user decision before proceeding
+3. If breaking down, identify which sub-components to create first
+4. Follow bottom-up implementation (atoms → molecules → organisms)
+```
+
+**Atomic Design Guidelines**:
+- **Atoms**: Basic building blocks (Button, Input, Label, Icon)
+- **Molecules**: Simple combinations of atoms (SearchField = Input + Button, FormField = Label + Input)
+- **Organisms**: Complex, reusable sections (Header, Card, Navigation)
+- **Templates**: Page-level layouts (not typically from Figma components)
+
+### 1.4 Design Token Integration
 
 Automatically extract and add Figma design tokens to `./src/app/globals.css` in the `@theme` block:
 
@@ -66,14 +93,14 @@ Create components in `./src/components/[component-name]/` with this structure:
 
 ```
 ./src/components/component-name/
-├── component-name.tsx       (snake_case filename, PascalCase component)
+├── component-name.tsx       (kebab-case filename, PascalCase component)
 ├── component-name.stories.tsx
 └── index.ts                 (NOT index.tsx - named export only)
 ```
 
 **Naming Rules**:
-- **Folders**: `snake_case` (e.g., `button`, `card_header`)
-- **Files**: `snake_case` (e.g., `button.tsx`, `card_header.stories.tsx`)
+- **Folders**: `kebab-case` (e.g., `button`, `card-header`)
+- **Files**: `kebab-case` (e.g., `button.tsx`, `card-header.stories.tsx`)
 - **React Components**: `PascalCase` (e.g., `Button`, `CardHeader`)
 - **Functions/Utils**: `camelCase` (e.g., `handleClick`, `formatDate`)
 - **No default exports** - use named exports: `export const Button = ...`
@@ -282,100 +309,13 @@ pnpm test:ci
 3. Verify all stories render correctly
 4. Check that variants match Figma design
 
-## Phase 5: Testing & Validation
+## Phase 5: Completion
 
-**IMPORTANT**: Frontend development is NOT complete until testing is done.
-
-### 5.1 Parallel Testing (Run Simultaneously)
-
-**Accessibility Testing** - DELEGATE TO: #file:../agents/accessibility.agent.md
-- Test keyboard navigation
-- Verify ARIA attributes and semantic HTML
-- Check focus management
-- Validate color contrast
-- Test with screen reader patterns
-- **DO NOT FIX** - Only document findings
-
-**Visual & Functional Testing** - DELEGATE TO: #file:../agents/playwright-tester.agent.md
-- Visual regression: Compare rendered component with Figma design
-- Basic interactions: Clicks, hovers, keyboard navigation
-- Use Storybook stories for coverage (not custom Playwright scripts in codebase)
-- Create temporary Playwright scripts for testing (not committed to repo)
-- **DO NOT FIX** - Only document discrepancies
-
-**Testing Agents Should NOT**:
-- Add features not present in the Figma design (e.g., hover states, transitions)
-- Recommend changes to existing child components (e.g., Button, Input)
-- Suggest improvements beyond matching the Figma spec
-
-**Testing Agents SHOULD**:
-- Only flag discrepancies between implementation and Figma design
-- Focus on WCAG compliance for accessibility
-- Note missing states only if they're shown in Figma
-
-### 5.2 Feedback Collection
-
-Both testing agents should provide feedback to #file:../agents/expert-react-frontend-engineer.agent.md in this format:
-
-```markdown
-## [Agent Name] Findings
-
-### Issues Found
-1. [Description] - Severity: [High/Medium/Low]
-   - Location: [file:line or component area]
-   - Recommendation: [suggested fix]
-
-### Passes
-- [List of things that passed]
-```
-
-### 5.3 User Review
-
-**STOP HERE** - Present all findings to the user:
-
-```
-## Testing Complete
-
-### Accessibility Findings
-[Summary from accessibility agent]
-
-### Visual/Functional Findings
-[Summary from playwright agent]
-
-**Action Required**: Please review these findings. Should I proceed with implementing the recommended fixes?
-```
-
-Wait for user approval before proceeding.
-
-### 5.4 Fix Implementation
-
-**DELEGATE TO**: #file:../agents/expert-react-frontend-engineer.agent.md
-
-**CRITICAL**: Do NOT modify existing child components unless they are the component being imported.
-- If testing reveals issues with existing components (e.g., Button missing hover states), document them separately
-- Ask user if they want those components updated in a separate task
-- Only fix issues in the component currently being imported
-
-After user approval:
-1. Implement all approved fixes for the current component only
-2. Re-run linting and type checking
-3. Re-run tests to verify fixes
-
-### 5.5 Retest
-
-After fixes are applied:
-1. Re-run accessibility tests
-2. Re-run visual/functional tests
-3. If new issues found, repeat feedback cycle
-4. If all tests pass, proceed to completion
-
-## Phase 6: Completion
-
-### 6.1 Final Checklist
+### 5.1 Final Checklist
 
 Verify all requirements met:
 
-- [ ] Component file structure follows naming conventions
+- [ ] Component file structure follows naming conventions (kebab-case)
 - [ ] Component extends appropriate HTML attributes
 - [ ] TSDoc present on interface and component
 - [ ] Each prop has its own comment block
@@ -383,16 +323,13 @@ Verify all requirements met:
 - [ ] No default exports (named exports only)
 - [ ] Index file is `.ts` not `.tsx`
 - [ ] Design tokens added to `globals.css`
-- [ ] All existing child components imported and up-to-date
+- [ ] All existing child components imported correctly
 - [ ] Storybook stories created (Default + Variants + Edge cases)
 - [ ] Lint passes with zero errors/warnings
 - [ ] Type check passes with zero errors
 - [ ] Test coverage ≥90%
-- [ ] Accessibility tests passed
-- [ ] Visual regression tests passed
-- [ ] All approved fixes implemented
 
-### 6.2 Completion Report
+### 5.2 Completion Report
 
 Present to user:
 
@@ -411,13 +348,17 @@ Present to user:
 - Type Safety: ✅ 0 errors
 - Linting: ✅ 0 errors/warnings  
 - Test Coverage: ✅ [X]%
-- Accessibility: ✅ Passed
-- Visual Regression: ✅ Passed
 
 ### Storybook
 View at: http://localhost:6006/?path=/story/components-[component-name]--default
 
-The component is ready for use!
+### Next Steps
+- Review the component in Storybook
+- Test manually for accessibility (keyboard navigation, screen readers)
+- Verify visual accuracy against Figma design
+- Test on different devices/browsers as needed
+
+The component is ready for review!
 ```
 
 ## Error Handling
@@ -451,15 +392,6 @@ Should I import and create these components first? (This will repeat this workfl
 I'll fix these issues before proceeding...
 ```
 
-### If Tests Fail
-```
-⚠️ Test Failures Detected
-
-[Test failure details]
-
-I'll investigate and fix these issues...
-```
-
 ## Best Practices
 
 1. **Always check Storybook status first** - Never assume it needs to be started
@@ -467,14 +399,13 @@ I'll investigate and fix these issues...
 3. **Design tokens first** - Add tokens to globals.css before implementing components
 4. **Quality over speed** - Don't skip quality gates
 5. **Document everything** - TSDoc is mandatory, not optional
-6. **Test thoroughly** - Stories are tests, so make them comprehensive
-7. **User approval** - Always get approval before implementing fixes
-8. **No shortcuts** - Follow every step of this workflow
+6. **Test thoroughly via stories** - Stories are tests, so make them comprehensive
+7. **Use kebab-case** - For all file and folder names
 
 ## Notes
 
 - This workflow uses `@storybook/addon-vitest` for component testing via stories
-- Playwright scripts for testing are temporary and not committed to the codebase
 - The `cn()` utility combines `clsx` and `tailwind-merge` for optimal class handling
 - Design tokens should use semantic naming that matches Figma conventions
-- Component naming must be consistent across files (PascalCase in code, snake_case in filenames)
+- Component naming: PascalCase in code, kebab-case in filenames
+- Manual testing (accessibility, visual, functional) should be done by the developer after component creation
