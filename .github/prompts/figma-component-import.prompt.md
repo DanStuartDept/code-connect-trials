@@ -1,5 +1,6 @@
 ---
 description: "Comprehensive workflow for importing Figma components via Figma MCP with quality assurance"
+tools: ['vscode/runCommand', 'execute', 'read', 'edit', 'search', 'web', 'agent', 'context7/*', 'playwright/*', 'figma/*', 'figma/*', 'storybook-mcp/*', 'todo']
 ---
 
 # Figma Component Import Workflow
@@ -13,6 +14,7 @@ Import and implement a Figma component following our codebase standards with com
 1. **Check if Storybook is running** at `http://localhost:6006/` - DO NOT attempt to start it if already running
 2. **Verify the Figma URL** is accessible and contains valid component design
 3. **Check for child components**: Scan the Figma design for nested components that reference other components in your codebase
+4. **Learn about existing components**: Use `mcp_storybook-mcp_get-documentation` to understand component APIs and usage patterns
 
 ## Phase 1: Discovery & Dependency Resolution
 
@@ -29,9 +31,10 @@ Import and implement a Figma component following our codebase standards with com
 ```
 For each child component in the Figma design:
   1. Check if it exists in ./src/components/
-  2. If missing, FLAG to the user: "Missing component: [ComponentName]. Should I import and create this component first?"
-  3. Wait for user confirmation before proceeding
-  4. If confirmed, recursively apply this workflow to the missing component first
+  2. Use 'mcp_storybook-mcp_get-documentation' to learn about the component's props and usage
+  3. If missing, FLAG to the user: "Missing component: [ComponentName]. Should I import and create this component first?"
+  4. Wait for user confirmation before proceeding
+  5. If confirmed, recursively apply this workflow to the missing component first
 ```
 
 ### 1.3 Design Token Integration
@@ -155,9 +158,10 @@ export const Button = ({ children, variant = 'primary', className, ...props }: B
 ### 2.3 Import Existing Components
 
 When the Figma design uses existing components:
-1. Import from the component's directory: `import { ComponentName } from '../component-name'`
-2. Verify the existing component is up-to-date with current standards
-3. If outdated, update it before using
+1. Use `mcp_storybook-mcp_get-documentation` to understand the component's API, props, and usage examples
+2. Import from the component's directory: `import { ComponentName } from '../component-name'`
+3. Verify the existing component is up-to-date with current standards
+4. If outdated, update it before using
 
 ### 2.4 Index File
 
