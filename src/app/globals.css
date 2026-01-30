@@ -24,6 +24,23 @@
 
   /* Typography tokens from Figma */
   --font-family-headings: 'Inter', sans-serif;
+  --font-family-body: 'Arial', sans-serif;
+  
+  /* Font sizing - XL (Heading) */
+  --font-size-xl: 40px;
+  --line-height-xl: 48px;
+  --font-weight-heading: 700;
+  
+  /* Font sizing - LG (Heading) */
+  --font-size-lg: 24px;
+  --line-height-lg: 28px;
+  
+  /* Font sizing - Main (Body) */
+  --font-size-main: 19px;
+  --line-height-main: 28.8px;
+  --font-weight-body: 400;
+  
+  /* Legacy tokens - keeping for backward compatibility */
   --typography-card-title-font-size: 24px;
   --typography-card-title-line-height: 32px;
 
@@ -45,4 +62,13 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer utilities {
+  .font-heading {
+    font-family: var(--font-family-headings);
+  }
+  .font-body {
+    font-family: var(--font-family-body);
+  }
 }
