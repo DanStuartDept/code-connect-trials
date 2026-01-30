@@ -36,7 +36,7 @@ export const Default: Story = {
  */
 export const HeadingXL: Story = {
   args: {
-    children: 'Card Heading',
+    children: 'The Quick Brown Fox',
     variant: 'heading-xl',
   },
 };
@@ -46,7 +46,7 @@ export const HeadingXL: Story = {
  */
 export const HeadingLG: Story = {
   args: {
-    children: 'Card Heading',
+    children: 'The Quick Brown Fox',
     variant: 'heading-lg',
   },
 };
@@ -56,7 +56,7 @@ export const HeadingLG: Story = {
  */
 export const BodyMain: Story = {
   args: {
-    children: 'Card Heading',
+    children: 'The quick brown fox jumps over the lazy dog.',
     variant: 'body-main',
   },
 };
