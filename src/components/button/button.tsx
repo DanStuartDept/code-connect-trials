@@ -1,22 +1,42 @@
 import React from 'react';
+import { cn } from '@/lib/utils';
 
-interface ButtonProps {
+/**
+ * Props for the Button component
+ * @extends React.ButtonHTMLAttributes<HTMLButtonElement>
+ */
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /**
-   * Button contents
+   * The visual style variant of the button
+   * @default 'primary'
    */
-  children: React.ReactNode;
-  /**
-   * Optional click handler
-   */
-  onClick?: () => void;
+  variant?: 'primary' | 'secondary';
 }
 
-export const Button = ({ children, onClick }: ButtonProps) => {
+/**
+ * Button component with primary and secondary variants
+ * 
+ * @example
+ * ```tsx
+ * <Button variant="primary" onClick={() => console.log('clicked')}>
+ *   Click me
+ * </Button>
+ * ```
+ * 
+ * @param props - Button properties
+ * @returns A styled button element
+ */
+export const Button = ({ children, variant = 'primary', className, ...props }: ButtonProps) => {
   return (
     <button
       type="button"
-      className="cursor-pointer inline-flex items-center justify-center bg-black px-4 py-1 text-white text-[18px] font-semibold leading-[28px]"
-      onClick={onClick}
+      className={cn(
+        'cursor-pointer inline-flex items-center justify-center px-4 py-1 text-lg font-semibold border border-black',
+        variant === 'primary' && 'bg-black text-white',
+        variant === 'secondary' && 'bg-white text-black',
+        className
+      )}
+      {...props}
     >
       {children}
     </button>
